@@ -1,0 +1,51 @@
+#containerList{
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 0.5rem 0px;
+    background: rgb(39, 43, 51);
+    min-height: calc(50vh - 60px);
+}
+
+#rowList {
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1920px;
+}
+
+.card{
+    display: flex;
+    overflow: hidden;
+    background: rgb(60, 62, 68);
+    border-radius: 0.5rem;
+    margin: 0.75rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px 
+}
+
+.card-body{
+    width: 100%;
+}
+
+.card-body h3{
+    font-size: 1.8em;
+    color: white;
+}
+
+.card-text{
+    font-size: 1.17em;
+    color: white;
+}
+
+.card-text strong{
+    color: darkgray;
+}
+
+#Link {
+    text-decoration: none ;
+} 

@@ -1,0 +1,38 @@
+#containerDetail{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1.5rem 1.5px;
+    background: rgb(39, 43, 51);
+    border-radius: 0.5rem;
+}
+
+.cardDetail{
+    display: flex;
+    flex-direction: row;
+    margin: 1rem;
+}
+
+#colImage{
+    margin: 5%;
+}
+
+#colImage img{
+    border-radius: 0.5rem;
+}
+
+#containerDetail .row{
+    margin: 0;
+}
+
+#colDatos{
+    margin: 5%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#colDatos p{
+    font-size: 18px;
+}

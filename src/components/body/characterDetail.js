@@ -48,7 +48,6 @@ const CharacterDetail = () => {
                 <p className="character-info">
                     <strong>Location:</strong> {character.location.name}
                 </p>
-                {/* Agrega más detalles según tus necesidades */}
             </div>
         </div>
       </div>

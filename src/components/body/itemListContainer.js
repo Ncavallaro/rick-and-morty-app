@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/body/itemListContainer.css'
 import ItemList from '../body/itemList';
-import Search from '../body/search';
 
 const ItemListContainer = () => {
   const [characters, setCharacters] = useState([]);
@@ -13,7 +12,6 @@ const ItemListContainer = () => {
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        console.log(`https://rickandmortyapi.com/api/character/?page=${currentPage}&location=${locationFilter}&name=${nameFilter}`)
         const response = await fetch(
           `https://rickandmortyapi.com/api/character/?page=${currentPage}&location=${locationFilter}&name=${nameFilter}`
           );
@@ -26,25 +24,29 @@ const ItemListContainer = () => {
     };
 
     fetchCharacters();
-  }, [locationFilter,nameFilter]);
+  }, [currentPage, locationFilter,nameFilter]);
 
   const handleNextPage = () => {
+    setNameFilter('');
+    setLocationFilter('');
     setCurrentPage(currentPage + 1);
   };
     
   const handlePreviousPage = () => {
+    setNameFilter('');
+    setLocationFilter('');
     setCurrentPage(currentPage - 1);
   };
   
   const handleLocationFilterChange = (event) => {
     event.preventDefault();
-    console.log(event.target.previousSibling.value);
+    setCurrentPage(1);
     setLocationFilter(event.target.previousSibling.value);
   };
 
   const handleNameFilterChange = (event) => {
     event.preventDefault();
-    console.log(event.target.previousSibling.value);
+    setCurrentPage(1);
     setNameFilter(event.target.previousSibling.value);
   };
 

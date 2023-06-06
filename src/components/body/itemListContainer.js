@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../../css/body/itemListContainer.css'
 import ItemList from '../body/itemList';
+import fetchCharacters from '../../api/apiConnect';
+import Pagination from '../body/pagination';
+import Search from '../body/search';
 
 const ItemListContainer = () => {
   const [characters, setCharacters] = useState([]);
@@ -10,31 +13,26 @@ const ItemListContainer = () => {
   const [nameFilter, setNameFilter] = useState('');
 
   useEffect(() => {
-    const fetchCharacters = async () => {
-      try {
-        const response = await fetch(
-          `https://rickandmortyapi.com/api/character/?page=${currentPage}&location=${locationFilter}&name=${nameFilter}`
-          );
-        const data = await response.json();
-        setCharacters(data.results);
-        setTotalPages(data.info.pages);
-      } catch (error) {
-        console.log(error);
-      }
+    const fetchData = async () => {
+      const data = await fetchCharacters(currentPage, locationFilter, nameFilter);
+      setCharacters(data.results);
+      setTotalPages(data.info.pages);
     };
+    fetchData();
+  }, [currentPage, locationFilter, nameFilter]);
 
-    fetchCharacters();
-  }, [currentPage, locationFilter,nameFilter]);
-
-  const handleNextPage = () => {
+  const resetFilters = () => {
     setNameFilter('');
     setLocationFilter('');
+  };
+
+  const handleNextPage = () => {
+    resetFilters();
     setCurrentPage(currentPage + 1);
   };
     
   const handlePreviousPage = () => {
-    setNameFilter('');
-    setLocationFilter('');
+    resetFilters();
     setCurrentPage(currentPage - 1);
   };
   
@@ -54,22 +52,16 @@ const ItemListContainer = () => {
     <>
       <div id='contanierBody'>
         <div className="container-fluid">
-              <form className="d-flex" role="search">
-                <div className='containerSearch'>
-                  <input className="form-control me-2" type="search" placeholder="Name" aria-label="Search"/>
-                  <button className="btn btn-outline-success" type="submit" onClick={handleNameFilterChange}>Search</button>
-                </div>
-                <div className='containerSearch'>
-                  <input className="form-control me-2" type="search" placeholder="Location" aria-label="Search"/>
-                  <button className="btn btn-outline-success" type="submit" onClick={handleLocationFilterChange}>Search</button>
-                </div>
-              </form>
+              <Search
+                handleNameFilterChange={handleNameFilterChange}
+                handleLocationFilterChange={handleLocationFilterChange}
+              />
         </div>
         <ItemList characters={characters}/>
-        <div className='containerPagination'>
-          <button type="button" className="btn btn-outline-success" onClick={handlePreviousPage}>Anterior</button>
-          <button type="button" className="btn btn-outline-success" onClick={handleNextPage}>Siguiente</button>
-        </div>
+        <Pagination
+          handleNextPage={handleNextPage}
+          handlePreviousPage={handlePreviousPage}
+        />
       </div>    
     </>
   );  

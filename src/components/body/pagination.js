@@ -1,9 +1,11 @@
-const pagination = (props) => {
+import '../../css/body/pagination.css';
+
+const pagination = ({ handleNextPage, handlePreviousPage }) => {
 
     return (
-        <div class="btn-group" role="group" aria-label="Basic outlined example">
-            <button type="button" class="btn btn-outline-primary">Left</button>
-            <button type="button" class="btn btn-outline-primary">Right</button>
+        <div className='containerPagination'>
+          <button type="button" className="btn btn-outline-success" onClick={handlePreviousPage}>Anterior</button>
+          <button type="button" className="btn btn-outline-success" onClick={handleNextPage}>Siguiente</button>
         </div>
     );
 };

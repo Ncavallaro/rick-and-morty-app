@@ -1,0 +1,8 @@
+.containerPagination{
+    text-align: center;
+}
+
+.containerPagination button{
+    margin: 0 0.5em 2.5em 0;
+    width: 6.5em
+}

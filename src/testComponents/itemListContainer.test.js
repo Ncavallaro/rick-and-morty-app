@@ -1,119 +1,68 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import ItemListContainer from './ItemListContainer';
+import { render, fireEvent } from '@testing-library/react';
+import ItemListContainer from '../../components/body/itemListContainer';
+import useFetchCharacters from '../api/apiListCharacters';
+
+jest.mock('../api/apiListCharacters', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}));
 
 describe('ItemListContainer', () => {
-  it('renders without errors', () => {
-    render(<ItemListContainer />);
+  const mockCharacters = [
+    { id: 1, name: 'Rick Sanchez', status: 'Alive', species: 'Human' },
+    { id: 2, name: 'Morty Smith', status: 'Alive', species: 'Human' },
+  ];
+
+  it('renderizar el componente ItemListContainer', () => {
+    jest.spyOn(useFetchCharacters, 'default').mockReturnValue({ characters: mockCharacters, totalPages: 2 });
+
+    const { getByText } = render(<ItemListContainer />);
+    expect(getByText('Search')).toBeInTheDocument();
+    expect(getByText('Pagination')).toBeInTheDocument();
   });
 
-  it('fetches characters and updates state', async () => {
-    // Mockear fetch y respuesta
-    jest.spyOn(window, 'fetch').mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValueOnce({
-        results: ['character1', 'character2'],
-        info: { pages: 2 },
-      }),
-    });
+  it('actualizar la página actual y restablecer los filtros en el botón de la página siguiente', () => {
+    jest.spyOn(useFetchCharacters, 'default').mockReturnValue({ characters: mockCharacters, totalPages: 2 });
 
-    render(<ItemListContainer />);
+    const { getByTestId } = render(<ItemListContainer />);
+    const nextPageButton = getByTestId('next-page-button');
 
-    // Esperar a que se actualice el estado
-    await screen.findByText('character1');
+    fireEvent.click(nextPageButton);
 
-    // Verificar que los personajes se hayan asignado correctamente al estado
-    expect(screen.getByText('character1')).toBeInTheDocument();
-    expect(screen.getByText('character2')).toBeInTheDocument();
+    expect(useFetchCharacters.default).toHaveBeenCalledWith(2, '', '');
   });
 
-  it('handles next page click', async () => {
-    jest.spyOn(window, 'fetch').mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValueOnce({
-        results: ['character3', 'character4'],
-        info: { pages: 3 },
-      }),
-    });
+  it('actualizar la página actual y restablecer los filtros en la página anterior haga clic en el botón', () => {
+    jest.spyOn(useFetchCharacters, 'default').mockReturnValue({ characters: mockCharacters, totalPages: 2 });
 
-    render(<ItemListContainer />);
+    const { getByTestId } = render(<ItemListContainer />);
+    const previousPageButton = getByTestId('previous-page-button');
 
-    await screen.findByText('character3');
+    fireEvent.click(previousPageButton);
 
-    // Hacer clic en el botón de siguiente página
-    fireEvent.click(screen.getByText('Siguiente'));
-
-    // Verificar que currentPage se haya actualizado correctamente
-    expect(screen.getByText('currentPage: 2')).toBeInTheDocument();
+    expect(useFetchCharacters.default).toHaveBeenCalledWith(1, '', '');
   });
 
-  it('handles previous page click', async () => {
-    jest.spyOn(window, 'fetch').mockResolvedValueOnce({
-      json: jest.fn().mockResolvedValueOnce({
-        results: ['character1', 'character2'],
-        info: { pages: 3 },
-      }),
-    });
+  it('actualizar el filtro de ubicación y restablecer la página actual en el cambio de filtro de ubicación', () => {
+    jest.spyOn(useFetchCharacters, 'default').mockReturnValue({ characters: mockCharacters, totalPages: 2 });
 
-    render(<ItemListContainer />);
-    await screen.findByText('character1');
+    const { getByTestId } = render(<ItemListContainer />);
+    const locationFilterInput = getByTestId('location-filter-input');
 
-    // Navegar a la segunda página
-    fireEvent.click(screen.getByText('Siguiente'));
-    await screen.findByText('character1');
+    fireEvent.change(locationFilterInput, { target: { previousSibling: { value: 'Earth' } } });
 
-    // Hacer clic en el botón de página anterior
-    fireEvent.click(screen.getByText('Anterior'));
-
-    // Verificar que currentPage se haya actualizado correctamente
-    expect(screen.getByText('currentPage: 1')).toBeInTheDocument();
+    expect(useFetchCharacters.default).toHaveBeenCalledWith(1, 'Earth', '');
   });
 
-  it('handles location filter change', async () => {
-    jest.spyOn(window, 'fetch').mockResolvedValue({
-      json: jest.fn().mockResolvedValueOnce({
-        results: ['character1', 'character2'],
-        info: { pages: 1 },
-      }),
-    });
+  it('actualizar el filtro de nombre y restablecer la página actual en el cambio de filtro de nombre', () => {
+    jest.spyOn(useFetchCharacters, 'default').mockReturnValue({ characters: mockCharacters, totalPages: 2 });
 
-    render(<ItemListContainer />);
-    await screen.findByText('character1');
+    const { getByTestId } = render(<ItemListContainer />);
+    const nameFilterInput = getByTestId('name-filter-input');
 
-    // Ingresar un valor en el campo de filtro de ubicación
-    fireEvent.change(screen.getByPlaceholderText('Location'), {
-      target: { value: 'Earth' },
-    });
+    fireEvent.change(nameFilterInput, { target: { previousSibling: { value: 'Rick' } } });
 
-    // Hacer clic en el botón de búsqueda de ubicación
-    fireEvent.click(screen.getByText('Search'));
-
-    // Verificar que locationFilter se haya actualizado correctamente
-    expect(screen.getByText('locationFilter: Earth')).toBeInTheDocument();
-    // Verificar que currentPage se haya restablecido a 1
-    expect(screen.getByText('currentPage: 1')).toBeInTheDocument();
-  });
-
-  it('handles name filter change', async () => {
-    jest.spyOn(window, 'fetch').mockResolvedValue({
-      json: jest.fn().mockResolvedValueOnce({
-        results: ['character1', 'character2'],
-        info: { pages: 1 },
-      }),
-    });
-
-    render(<ItemListContainer />);
-    await screen.findByText('character1');
-
-    // Ingresar un valor en el campo de filtro de nombre
-    fireEvent.change(screen.getByPlaceholderText('Name'), {
-      target: { value: 'Rick' },
-    });
-
-    // Hacer clic en el botón de búsqueda de nombre
-    fireEvent.click(screen.getByText('Search'));
-
-    // Verificar que nameFilter se haya actualizado correctamente
-    expect(screen.getByText('nameFilter: Rick')).toBeInTheDocument();
-    // Verificar que currentPage se haya restablecido a 1
-    expect(screen.getByText('currentPage: 1')).toBeInTheDocument();
+    expect(useFetchCharacters.default).toHaveBeenCalledWith(1, '', 'Rick');
   });
 });

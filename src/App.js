@@ -11,12 +11,12 @@ function App() {
       <BrowserRouter>
         <Nav />
         <Routes>
-            <Route exact path="/" element={<ItemListContainer/>} />
-            <Route path="/character/:id" element={<CharacterDetail/>} />
+          <Route exact path="/" element={<ItemListContainer />} />
+          <Route path="/character/:id" element={<CharacterDetail />} />
         </Routes>
       </BrowserRouter>
     </div>
-  );  
+  );
 }
 
 export default App;

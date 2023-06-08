@@ -1,24 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import '../../css/body/characterDetail.css';
+import useFetchCharacter from '../../api/apiCharacters';
 
 const CharacterDetail = () => {
   const { id } = useParams();
-  const [character, setCharacter] = useState(null);
-
-  useEffect(() => {
-    const fetchCharacter = async () => {
-      try {
-        const response = await fetch(`https://rickandmortyapi.com/api/character/${id}`);
-        const data = await response.json();
-        setCharacter(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchCharacter();
-  }, [id]);
+  const character = useFetchCharacter(id);
 
   if (!character) {
     return <div>Loading...</div>;

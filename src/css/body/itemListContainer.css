@@ -9,7 +9,7 @@
 }
 
 #contanierBody .container-fluid{
-    width: 45%;
+    width: 50%;
     margin: 1.5em;
 }
 
@@ -21,5 +21,31 @@
     align-items: center;
     width: 100%;
     margin-right: 0.8em;
+}
 
+.containerSearch button {
+    border-radius: 10px;
+    width: 6.5em;
+}
+
+.containerSearch button:hover{
+    background-color: #198754;
+}
+
+@media (max-width: 768px) {
+    #containerSearches{
+        margin-bottom: 0px !important;
+    }
+
+    #containerSearches form{
+        flex-direction: column;
+    }
+
+    .containerSearch{
+        margin-bottom: 5%;
+    }
+
+    #contanierBody .container-fluid{
+        width: 75%;
+    }
 }

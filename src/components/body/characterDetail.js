@@ -1,14 +1,19 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "../../css/body/characterDetail.css";
 import useFetchCharacter from "../../api/apiCharacters";
 
 const CharacterDetail = () => {
   const { id } = useParams();
   const character = useFetchCharacter(id);
+  const navigate  = useNavigate();
 
   if (!character) {
     return <div>Loading...</div>;
   }
+
+  const goBack = () => {
+    navigate(-1)
+  };
 
   return (
     <div className="container" id="containerDetail">
@@ -43,7 +48,7 @@ const CharacterDetail = () => {
             </div>
           </div>
         </div>
-        <button type="button" className="btn btn-outline-success">
+        <button type="button" className="btn btn-outline-success" onClick={goBack}>
         Volver
       </button>
       </div>

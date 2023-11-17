@@ -5,6 +5,7 @@
     padding: 1.5rem 1.5px;
     background: rgb(39, 43, 51);
     border-radius: 0.5rem;
+    width: 60%;
 }
 
 .cardDetail{
@@ -23,6 +24,29 @@
 
 #containerDetail .row{
     margin: 0;
+    justify-content: center;
+    width: 100%;
+}
+
+#containerDetail button{
+    width: 6.5em;
+}
+
+#containerButton{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.underline {
+    top: -5px;
+    width: 60%;
+    height: 1px;
+    margin-bottom: 3%;
+    background-color: white;
+    border-radius: 9px
 }
 
 #colDatos{
@@ -35,4 +59,18 @@
 
 #colDatos p{
     font-size: 18px;
+}
+
+@media (max-width: 768px) {
+    #containerDetail{
+        width: 90%;
+    }
+    .cardDetail{
+        flex-direction: column;
+        margin: 0px;
+    }
+
+    #containerDetail{
+        width: 90%;
+    }
 }
